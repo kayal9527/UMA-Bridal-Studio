@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | UMA Bridal Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-body">
+  <!-- Login Screen -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <h1>Admin Login</h1>
+      <p>UMA Bridal Studio Management Panel</p>
+      <form id="loginForm">
+        <div class="form-group" style="margin-bottom:1.5rem;text-align:left">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" required placeholder="Enter admin password">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
+      </form>
+      <p style="margin-top:1.5rem;font-size:0.78rem;color:#999">Default password: uma2024</p>
+      <a href="index.html" style="display:block;margin-top:1rem;font-size:0.85rem;color:var(--gold-dark)">← Back to Website</a>
+    </div>
+  </div>
+
+  <!-- Admin Layout -->
+  <div class="admin-layout" id="adminLayout" style="display:none">
+    <aside class="admin-sidebar">
+      <h1>UMA Admin</h1>
+      <p>Bridal Studio Panel</p>
+      <ul class="admin-nav">
+        <li><button data-panel="panelMenu">Manage Menu</button></li>
+        <li><button data-panel="panelGallery">Bride Photos</button></li>
+        <li><button data-panel="panelBookings">Bookings</button></li>
+        <li><button data-panel="panelReport">Monthly Report</button></li>
+        <li><button data-panel="panelSettings">Settings</button></li>
+      </ul>
+      <div style="margin-top:2rem">
+        <a href="index.html" style="color:rgba(255,255,255,0.5);font-size:0.82rem;display:block;margin-bottom:0.75rem">← View Website</a>
+        <button class="btn btn-outline btn-sm" id="logoutBtn" style="width:100%;color:var(--white);border-color:rgba(255,255,255,0.3)">Logout</button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <!-- Manage Menu Panel -->
+      <div class="admin-panel active" id="panelMenu">
+        <div class="admin-header">
+          <h2>Manage Menu</h2>
+        </div>
+
+        <div class="admin-card">
+          <h3 id="menuFormTitle" style="margin-bottom:1rem;font-family:var(--font-display)">Add Menu Item</h3>
+          <form id="menuForm">
+            <input type="hidden" id="menuEditId">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="menuName">Name *</label>
+                <input type="text" id="menuName" required placeholder="Service name">
+              </div>
+              <div class="form-group">
+                <label for="menuCategory">Category</label>
+                <select id="menuCategory">
+                  <option value="service">Service</option>
+                  <option value="complementary">Complementary</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="menuDescription">Description</label>
+              <textarea id="menuDescription" rows="2" placeholder="Brief description"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="menuPrice">Price (₹) — use 0 for complimentary</label>
+              <input type="number" id="menuPrice" min="0" step="100" value="0">
+            </div>
+            <div style="display:flex;gap:0.75rem">
+              <button type="submit" class="btn btn-primary">Save Item</button>
+              <button type="button" class="btn btn-outline" id="menuCancelEdit" style="display:none">Cancel Edit</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <h3 style="margin-bottom:1rem;font-family:var(--font-display)">All Menu Items</h3>
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Price</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="menuTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bride Photos Panel -->
+      <div class="admin-panel" id="panelGallery">
+        <div class="admin-header">
+          <h2>Bride Photos</h2>
+        </div>
+
+        <div class="admin-card">
+          <h3 style="margin-bottom:1rem;font-family:var(--font-display)">Upload Bride Photo</h3>
+          <form id="photoForm">
+            <div class="form-group">
+              <label for="photoCaption">Caption (optional)</label>
+              <input type="text" id="photoCaption" placeholder="e.g. Wedding look — Jan 2026">
+            </div>
+            <label class="photo-upload-zone" id="photoUploadZone">
+              <input type="file" id="photoFile" accept="image/jpeg,image/png,image/webp,image/jpg">
+              <p style="font-size:1.1rem;margin-bottom:0.5rem">📷 Click to upload photo</p>
+              <p style="font-size:0.82rem;color:var(--muted)">JPG, PNG or WEBP — max 5MB</p>
+            </label>
+            <div id="photoPreview" style="margin-top:1rem;display:none">
+              <img id="photoPreviewImg" src="" alt="Preview" style="max-width:200px;border-radius:8px;border:1px solid #ddd">
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top:1rem" id="photoSubmitBtn" disabled>Upload Photo</button>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <h3 style="margin-bottom:1rem;font-family:var(--font-display)">Uploaded Photos</h3>
+          <div class="admin-photo-grid" id="adminPhotoGrid"></div>
+        </div>
+      </div>
+
+      <!-- Bookings Panel -->
+      <div class="admin-panel" id="panelBookings">
+        <div class="admin-header">
+          <h2>Bookings</h2>
+        </div>
+        <div class="filter-bar">
+          <label>Filter by status:</label>
+          <select id="bookingFilterStatus">
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="paid">Paid</option>
+          </select>
+        </div>
+        <div class="admin-card">
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Phone</th>
+                  <th>Event Date</th>
+                  <th>Type</th>
+                  <th>Services</th>
+                  <th>Status</th>
+                  <th>Booked On</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="bookingsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly Report Panel -->
+      <div class="admin-panel" id="panelReport">
+        <div class="admin-header">
+          <h2>Monthly Booking Report</h2>
+        </div>
+
+        <div class="filter-bar">
+          <select id="reportMonth"></select>
+          <select id="reportYear"></select>
+          <button class="btn btn-primary btn-sm" id="generateReport">Generate Report</button>
+          <button class="btn btn-outline btn-sm" id="printReport">Print Report</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3>Total Bookings</h3>
+            <div class="value" id="statTotal">0</div>
+          </div>
+          <div class="stat-card">
+            <h3>Pending</h3>
+            <div class="value" id="statPending">0</div>
+          </div>
+          <div class="stat-card">
+            <h3>Confirmed</h3>
+            <div class="value" id="statConfirmed">0</div>
+          </div>
+          <div class="stat-card">
+            <h3>Paid</h3>
+            <div class="value" id="statPaid">0</div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Phone</th>
+                  <th>Event Date</th>
+                  <th>Type</th>
+                  <th>Services</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="reportTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="reportPrintArea" style="display:none"></div>
+      </div>
+
+      <!-- Settings Panel -->
+      <div class="admin-panel" id="panelSettings">
+        <div class="admin-header">
+          <h2>Settings</h2>
+        </div>
+        <div class="admin-card" style="max-width:500px">
+          <form id="settingsForm">
+            <div class="form-group">
+              <label for="settingsUpi">UPI ID (for QR payments)</label>
+              <input type="text" id="settingsUpi" placeholder="yourname@upi">
+            </div>
+            <div class="form-group">
+              <label for="settingsPhone">Phone Number</label>
+              <input type="tel" id="settingsPhone" placeholder="7558113039">
+            </div>
+            <div class="form-group">
+              <label for="settingsPassword">New Admin Password</label>
+              <input type="password" id="settingsPassword" placeholder="Leave blank to keep current">
+            </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
