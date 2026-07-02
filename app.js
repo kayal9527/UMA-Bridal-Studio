@@ -45,8 +45,7 @@ function renderGallery() {
   const photos = getBridePhotos();
 
   if (photos.length === 0) {
-    grid.innerHTML = '<div class="gallery-empty"><p>No bride photos yet.</p><p style="font-size:0.85rem;margin-top:0.5rem">Photos can be uploaded from the Admin panel.</p></div>';
-    return;
+      return;
   }
 
   grid.innerHTML = photos
